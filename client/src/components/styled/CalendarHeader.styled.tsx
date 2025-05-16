@@ -46,7 +46,10 @@ interface StyledBtnProps {
 }
 
 // .calendar__header-btn
-export const StyledCalendarHeaderBtn = styled.button<StyledBtnProps>`
+export const StyledCalendarHeaderBtn = styled.button.withConfig({
+    // Exclude `variant` from being passed to the DOM
+    shouldForwardProp: (prop) => prop !== "variant",
+})<StyledBtnProps>`
     padding: 0;
     border: none;
     opacity: 0.5;

@@ -2,7 +2,6 @@ import CalendarHeader from "./CalendarHeader";
 import CalendarDays from "./CalendarDays";
 import { StyledContainer } from "./styled/Container.styled";
 import { StyledCalendarInner, StyledCalendarNowBtnBox } from "./styled/Calendar.styled"; // limiting container for calendar
-import "./styled/calendar-prev.css";
 
 const Calendar = () => {
     return (

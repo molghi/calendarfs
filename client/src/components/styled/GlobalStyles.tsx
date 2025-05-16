@@ -103,6 +103,33 @@ export const GlobalStyles = createGlobalStyle`
         opacity: 1;
     }
 
+    & * {
+        font-variant-ligatures: none;
+    }
+
+/* ============================================================================================= */
+
+    .app__inner {
+        display: flex;
+        justify-content: space-between;
+        column-gap: 50px;
+    }
+
+    .app__col {
+        &:first-child {
+            max-width: calc(var(--dayBoxSize) * 7 + 2px);
+            flex-basis: calc(var(--dayBoxSize) * 7 + 2px);
+            flex-shrink: 0;
+            flex-grow: 1;
+        }
+        &:last-child {
+            flex-shrink: 1;
+            flex-grow: 0;
+            flex-basis: 500px;
+            max-width: 500px;
+        }
+    }
+
 /* ============================================================================================= */
 
     /* DARK SCROLLBAR */
