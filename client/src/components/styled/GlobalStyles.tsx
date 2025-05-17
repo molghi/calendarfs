@@ -1,24 +1,40 @@
 import { createGlobalStyle } from "styled-components";
+import "styled-components";
+
+// Type declaration
+declare module "styled-components" {
+    export interface DefaultTheme {
+        accentColor: string;
+        contentWidth: string;
+        breakpoints: {
+            wide: string;
+            laptop: string;
+            tablet: string;
+            smallish: string;
+            mobile: string;
+        };
+    }
+}
 
 export const GlobalStyles = createGlobalStyle`
     /* VARIABLES */
 
     :root {
-        --accent: rgb(56, 101, 140);
+        --accent: ${({ theme }) => theme.accentColor};
         --white: #fff;
         --bg: #000;
         --dayBoxSize: 80px;
         --dayFontSize: 25px;
     }
 
-    @media (max-width: 620px) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.smallish}) {
         :root {
             --dayBoxSize: 60px;
             --dayFontSize: 20px;
         }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
         :root {
             --dayBoxSize: 40px;
             --dayFontSize: 14px;
@@ -65,7 +81,7 @@ export const GlobalStyles = createGlobalStyle`
         font-family: inherit;
         border: 1px solid var(--accent);
         outline: none;
-        padding: 10px;
+        padding: 1rem;
         font-size: inherit;
         transition: box-shadow 0.3s;
     }
@@ -76,13 +92,13 @@ export const GlobalStyles = createGlobalStyle`
 
     input:focus,
     textarea:focus {
-        box-shadow: 0 0 10px var(--accent);
+        box-shadow: 0 0 1rem var(--accent);
     }
 
     button:hover {
         background-color: var(--accent);
         color: var(--bg);
-        box-shadow: 0 0 10px var(--accent);
+        box-shadow: 0 0 1rem var(--accent);
     }
 
     button:active {
@@ -112,7 +128,7 @@ export const GlobalStyles = createGlobalStyle`
     .app__inner {
         display: flex;
         justify-content: space-between;
-        column-gap: 50px;
+        column-gap: 5rem;
     }
 
     .app__col {
@@ -125,8 +141,8 @@ export const GlobalStyles = createGlobalStyle`
         &:last-child {
             flex-shrink: 1;
             flex-grow: 0;
-            flex-basis: 500px;
-            max-width: 500px;
+            flex-basis: 50rem;
+            max-width: 50rem;
         }
     }
 

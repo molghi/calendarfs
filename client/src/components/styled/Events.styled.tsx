@@ -6,7 +6,7 @@ export const StyledRightColumn = styled.div`
     max-height: 84vh;
     overflow-x: hidden;
     position: relative;
-    min-height: 660px;
+    min-height: 66rem;
 `;
 
 // ================================================================================================
@@ -24,21 +24,21 @@ export const StyledEvOccBox = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    column-gap: 20px;
-    row-gap: 10px;
+    column-gap: 2rem;
+    row-gap: 1rem;
     background-color: var(--bg);
     position: sticky;
     z-index: 10;
-    padding-bottom: 20px;
+    padding-bottom: 2rem;
     top: 0;
     left: 0;
     right: 0;
 
-    @media (max-width: 1182px) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.wide}) {
         flex-wrap: wrap;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
         flex-direction: column;
         align-items: start;
     }
@@ -47,32 +47,32 @@ export const StyledEvOccBox = styled.div`
 // ================================================================================================
 
 export const StyledEvOccTitle = styled.div`
-    font-size: 24px;
+    font-size: 2.4rem;
     text-shadow: 0 0 2px var(--accent);
     position: relative;
     display: inline-block;
 
     span {
-        font-size: 14px;
+        font-size: 1.4rem;
         position: absolute;
         top: 0px;
-        right: -32px;
+        right: -3.2rem;
         background-color: var(--accent);
         color: var(--bg);
-        height: 25px;
-        width: 25px;
+        height: 2.5rem;
+        width: 2.5rem;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    @media (max-width: 1182px) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.wide}) {
         /* font-size: 20px; */
     }
 
-    @media (max-width: 480px) {
-        font-size: 20px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+        font-size: 2rem;
     }
 `;
 
@@ -81,12 +81,12 @@ export const StyledEvOccTitle = styled.div`
 export const StyledEvOccSwitch = styled.div`
     display: flex;
     align-items: center;
-    margin-right: 5px;
+    margin-right: 0.5rem;
 
     button {
         background-color: var(--bg);
-        font-size: 14px;
-        padding: 5px 7px;
+        font-size: 1.4rem;
+        padding: 0.5rem 0.7rem;
         cursor: pointer;
         transition: box-shadow 0.3s;
 
@@ -110,15 +110,15 @@ export const StyledEvOccSwitch = styled.div`
 export const StyledEvOccItems = styled.div`
     display: flex;
     flex-direction: column;
-    row-gap: 15px;
-    padding-right: 7px;
+    row-gap: 1.5rem;
+    padding-right: 0.7rem;
     height: 100%;
 `;
 
 // ================================================================================================
 
 export const StyledEvOccItem = styled.div`
-    padding: 10px 15px;
+    padding: 1rem 1.5rem;
     background-color: #151515;
     position: relative;
 
@@ -139,7 +139,7 @@ export const StyledEvOccItemBtns = styled.div`
     top: 1px;
     right: 1px;
     display: flex;
-    column-gap: 7px;
+    column-gap: 0.7rem;
     opacity: 0;
     visibility: hidden;
     transition: all 0.2s;
@@ -153,7 +153,7 @@ export const StyledEvOccItemBtn = styled.button`
     transition: none;
 
     svg {
-        width: 15px;
+        width: 1.5rem;
         path {
             fill: var(--accent);
         }
@@ -174,19 +174,19 @@ export const StyledEvOccItemBtn = styled.button`
 // ================================================================================================
 
 export const StyledEvOccItemRow = styled.div`
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
-    column-gap: 20px;
+    column-gap: 2rem;
 
     div {
         flex: 1 1 50%;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
         flex-direction: column;
         align-items: start;
-        row-gap: 5px;
+        row-gap: 0.5rem;
         margin-bottom: 0;
     }
 `;
@@ -194,16 +194,16 @@ export const StyledEvOccItemRow = styled.div`
 // ================================================================================================
 
 export const StyledEvOccItemTitle = styled.div`
-    font-size: 19px;
-    max-height: 44px;
+    font-size: 1.9rem;
+    max-height: 4.4rem;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2; /* Limit to 2 lines */
 
-    @media (max-width: 480px) {
-        font-size: 14px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+        font-size: 1.4rem;
     }
 `;
 
@@ -211,10 +211,10 @@ export const StyledEvOccItemTitle = styled.div`
 
 export const StyledEvOccItemMinorTitle = styled.span`
     opacity: 0.5;
-    font-size: 16px;
+    font-size: 1.6rem;
 
-    @media (max-width: 480px) {
-        font-size: 14px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+        font-size: 1.4rem;
     }
 `;
 
@@ -222,8 +222,8 @@ export const StyledEvOccItemMinorTitle = styled.span`
 
 export const StyledEvOccItemDescription = styled.span`
     line-height: 1.25;
-    font-size: 14px;
-    max-height: 90px;
+    font-size: 1.4rem;
+    max-height: 9rem;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;

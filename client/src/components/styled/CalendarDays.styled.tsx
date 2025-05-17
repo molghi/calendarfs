@@ -12,7 +12,7 @@ export const StyledCalendarDays = styled.div`
 // ================================================================================================
 
 interface StyledCalendarDayProps {
-    variant?: "weekday" | "empty" | "passed" | "today" | "";
+    variant?: "weekday" | "empty" | "passed" | "today" | "highlighted" | "";
 }
 
 // calendar__day
@@ -30,18 +30,98 @@ export const StyledCalendarDay = styled.div.withConfig({
     height: var(--dayBoxSize);
     max-height: var(--dayBoxSize);
     font-size: var(--dayFontSize);
-    padding: 5px;
+    padding: 0.5rem;
     box-shadow: 0 0 1px var(--accent);
     transition: box-shadow 0.3s;
     cursor: pointer;
     position: relative;
 
-    @media (max-width: 480px) {
-        padding: 3px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+        padding: 0.3rem;
     }
 
-    /* &:hover {
-        span.calendar__day--eventful {
+    /* ==================================================================== */
+    /* EVENT BADGE */
+
+    span.events {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: var(--bg);
+        font-size: 1.6rem;
+        z-index: 5;
+
+        &:after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            right: 0;
+            border-left: 2.5rem solid transparent;
+            border-right: 0px solid transparent;
+            border-top: 2.5rem solid var(--accent);
+        }
+
+        @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+            font-size: 1.1rem;
+            &:after {
+                border-left: 2.4rem solid transparent;
+                border-right: 0px solid transparent;
+                border-top: 2.4rem solid var(--accent);
+            }
+        }
+    }
+
+    &:hover {
+        span.events {
+            color: var(--accent);
+            &:after {
+                border-top: 2.5rem solid var(--bg);
+            }
+        }
+    }
+
+    /* ==================================================================== */
+    /* OCCURRENCE BADGE */
+
+    span.occurrences {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        color: var(--bg);
+        z-index: 5;
+        font-size: 1.6rem;
+        width: 2.2rem;
+        height: 2.2rem;
+        background-color: var(--white);
+        box-shadow: 0 0 1rem var(--white);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+            bottom: 0.5rem;
+            right: 0.5rem;
+            font-size: 1.3rem;
+        }
+        @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+            font-size: 0;
+            width: 1rem;
+            height: 1rem;
+            bottom: 0.5rem;
+            right: 0.5rem;
+        }
+    }
+
+    /* ==================================================================== */
+
+    &:hover {
+        span.events {
             color: var(--accent);
             &:after {
                 border-top: 25px solid var(--bg);
@@ -50,19 +130,19 @@ export const StyledCalendarDay = styled.div.withConfig({
     }
 
     &:hover {
-        span.calendar__day--occurence {
+        span.occurrences {
             color: var(--white);
             background-color: var(--bg);
             box-shadow: 0 0 10px var(--bg);
         }
-    } */
+    }
 
     /* ==================================================================== */
     /* ON HOVER */
 
     &:hover {
         background-color: var(--accent);
-        box-shadow: 0 0 10px var(--accent);
+        box-shadow: 0 0 1rem var(--accent);
 
         span {
             color: var(--bg);
@@ -80,8 +160,8 @@ export const StyledCalendarDay = styled.div.withConfig({
     span {
         pointer-events: none;
 
-        @media (max-width: 480px) {
-            font-size: 12px;
+        @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+            font-size: 1.2rem;
         }
     }
 
@@ -92,21 +172,21 @@ export const StyledCalendarDay = styled.div.withConfig({
         if (props.variant === "weekday")
             return `
             pointer-events: none;
-            font-size: 16px;
+            font-size: 1.6rem;
             text-align: center;
-            max-height: 30px;
+            max-height: 3rem;
 
-            @media (max-width: 480px) {
-                    font-size: 12px;
-                    max-height: 25px;
+            @media (max-width: ${() => props.theme.breakpoints.mobile}) {
+                    font-size: 1.2rem;
+                    max-height: 2.5rem;
                 } 
         `;
         if (props.variant === "empty")
             return `
                 pointer-events: none;
                 position: relative;
-                width: 80px;
-                height: 80px;
+                width: 8rem;
+                height: 8rem;
                 background-color: #111;
                 overflow: hidden;
 
@@ -128,7 +208,7 @@ export const StyledCalendarDay = styled.div.withConfig({
                         transparent 75%,
                         transparent
                     );
-                    background-size: 20px 20px;  /* the size of the stripes */
+                    background-size: 2rem 2rem;  /* the size of the stripes */
                 } 
                 
                 &::before {
@@ -153,13 +233,32 @@ export const StyledCalendarDay = styled.div.withConfig({
         if (props.variant === "today")
             return `
             background-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent);
+            box-shadow: 0 0 2rem var(--accent);
 
             span {
                     color: var(--bg);
                     opacity: 1;
                 } 
         `;
+
+        if (props.variant === "highlighted")
+            return `
+            background-color: var(--accent);
+            box-shadow: 0 0 2rem var(--accent);
+
+            span {
+                    color: var(--bg);
+                    opacity: 1;
+                } 
+
+            span.events {
+                color: var(--accent);
+                &:after {
+                    border-top-color: var(--bg);
+                }
+            }
+                `;
+
         if (props.variant === "") return ``;
     }}
 `;

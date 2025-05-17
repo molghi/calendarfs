@@ -63,3 +63,4 @@ build/
 coverage/
 
 config.js
+calendar-test-data.json

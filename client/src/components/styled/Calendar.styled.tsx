@@ -16,7 +16,7 @@ export const StyledCalendarInner = styled.div`
 // .calendar__now-btn-box
 export const StyledCalendarNowBtnBox = styled.div`
     text-align: right;
-    margin-top: 20px;
+    margin-top: 2rem;
     position: relative;
 
     button {
@@ -38,10 +38,6 @@ export const StyledCalendarNowBtnBox = styled.div`
 
         &:active {
             opacity: 0.5;
-        }
-
-        @media (max-width: 480px) {
-            /* font-size: 16px; */
         }
     }
 `;

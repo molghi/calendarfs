@@ -1,23 +1,21 @@
 import styled from "styled-components";
 
 export const StyledContainer = styled.div`
-    max-width: 1170px;
+    max-width: ${({ theme }) => theme.contentWidth};
     margin: 0 auto;
     width: 100%;
     position: relative;
 
-    /* MEDIA QUERIES */
-
-    @media (max-width: 1182px) {
-        max-width: 970px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.wide}) {
+        max-width: 97rem;
     }
 
-    @media (max-width: 992px) {
-        max-width: 750px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.laptop}) {
+        max-width: 75rem;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
         max-width: none;
-        padding: 0 10px;
+        padding: 0 1rem;
     }
 `;

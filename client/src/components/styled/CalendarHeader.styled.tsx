@@ -4,19 +4,17 @@ import styled from "styled-components";
 
 // .calendar__header
 export const StyledCalendarHeader = styled.div`
-    font-size: 29.5px;
+    font-size: 2.95rem;
     text-shadow: 0 0 2px var(--accent);
-    padding-left: 18px;
+    padding-left: 1.8rem;
 
-    /* MEDIA QUERIES */
-
-    @media (max-width: 620px) {
-        font-size: 22px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.smallish}) {
+        font-size: 2.2rem;
     }
 
-    @media (max-width: 480px) {
-        font-size: 15.5px;
-        padding-left: 5px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+        font-size: 1.55rem;
+        padding-left: 0.5rem;
     }
 `;
 
@@ -24,17 +22,15 @@ export const StyledCalendarHeader = styled.div`
 
 // .calendar__header-box
 export const StyledCalendarHeaderBox = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
     color: var(--accent);
 
-    /* MEDIA QUERIES */
-
-    @media (max-width: 620px) {
-        margin-bottom: 12px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.smallish}) {
+        margin-bottom: 1.2rem;
     }
 `;
 
@@ -55,7 +51,7 @@ export const StyledCalendarHeaderBtn = styled.button.withConfig({
     opacity: 0.5;
     transition: none;
     position: absolute;
-    top: 5px;
+    top: 0.5rem;
 
     &:hover {
         opacity: 1;
@@ -73,10 +69,10 @@ export const StyledCalendarHeaderBtn = styled.button.withConfig({
     /* ICON */
 
     svg {
-        width: 24px;
+        width: 2.4rem;
 
-        @media (max-width: 992px) {
-            width: 35px;
+        @media (max-width: ${({ theme }) => theme.breakpoints.laptop}) {
+            width: 3.5rem;
         }
     }
 
@@ -89,34 +85,34 @@ export const StyledCalendarHeaderBtn = styled.button.withConfig({
 
     ${(props) =>
         props.variant === "prev"
-            ? `left: -35px;
+            ? `left: -3.5rem;
 
-        @media (max-width: 1182px) {
-            left: -24px;
+        @media (max-width: ${() => props.theme.breakpoints.wide}) {
+            left: -2.4rem;
         }
         
-        @media (max-width: 992px) {
-            left: -45px;
+        @media (max-width: ${() => props.theme.breakpoints.laptop}) {
+            left: -4.5rem;
         }
 
         @media (max-width: 680px) {
-            right: 60px;
+            right: 6.0rem;
             left: initial;
-            top: -45px;
+            top: -4.5rem;
         }`
-            : `right: -35px;
+            : `right: -3.5rem;
 
-        @media (max-width: 1182px) {
-            right: -24px;
+        @media (max-width: ${() => props.theme.breakpoints.wide}) {
+            right: -2.4rem;
         }
 
-        @media (max-width: 992px) {
-            right: -45px;
+        @media (max-width: ${() => props.theme.breakpoints.laptop}) {
+            right: -4.5rem;
         }
         
         @media (max-width: 680px) {
             right: 0;
-            top: -45px;
+            top: -4.5rem;
         }`}
 `;
 

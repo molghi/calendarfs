@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 export const StyledActions = styled.div`
     position: fixed;
-    bottom: 8px;
-    left: 8px;
+    bottom: 0.8rem;
+    left: 0.8rem;
     color: var(--accent);
 
     &:hover {
@@ -28,15 +28,15 @@ export const StyledActionsBtn = styled.div`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 3rem;
+    height: 3rem;
     background-color: var(--accent);
     border-radius: 50%;
     cursor: pointer;
     opacity: 0.3;
 
     svg {
-        width: 20px;
+        width: 2rem;
 
         path {
             fill: var(--bg);
@@ -53,7 +53,7 @@ export const StyledActionsMenu = styled.div`
     opacity: 0;
     visibility: hidden;
     transition: all 0.2s;
-    padding-bottom: 8px;
+    padding-bottom: 0.8rem;
 `;
 
 // ================================================================================================
@@ -62,15 +62,15 @@ export const StyledActionsAction = styled.div`
     white-space: nowrap;
     background-color: var(--bg);
     cursor: pointer;
-    font-size: 15px;
-    padding: 2px 5px;
+    font-size: 1.5rem;
+    padding: 0.2rem 0.5rem;
 
     &:hover {
         background-color: var(--accent);
         color: var(--bg);
     }
 
-    @media (max-width: 992px) {
-        padding: 10px 15px;
+    @media (max-width: ${({ theme }) => theme.breakpoints.laptop}) {
+        padding: 1rem 1.5rem;
     }
 `;

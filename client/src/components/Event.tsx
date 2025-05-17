@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import {
     StyledEvOccItem,
     StyledEvOccItemBtns,
@@ -8,17 +9,26 @@ import {
     StyledEvOccItemDescription,
 } from "./styled/Events.styled";
 
+// Type Declaration
 interface EventProps {
     item: {
-        name: string;
         date: string;
-        note: string;
+        description: string;
+        title: string;
+        added: string;
+        time?: string;
+        category?: string;
     };
+    setDayHighlighted: Dispatch<SetStateAction<string>>;
 }
 
-const Event = ({ item }: EventProps) => {
+const Event = ({ item, setDayHighlighted }: EventProps) => {
     return (
-        <StyledEvOccItem data-date={item.date.split("/").reverse().join(",")}>
+        <StyledEvOccItem
+            onMouseEnter={() => setDayHighlighted(item.date)}
+            onMouseLeave={() => setDayHighlighted("")}
+            data-date={item.date.split("/").reverse().join(",")}
+        >
             {/* BUTTONS */}
             <StyledEvOccItemBtns className="btns">
                 {/* EDIT BTN */}
@@ -38,7 +48,7 @@ const Event = ({ item }: EventProps) => {
             {/* INFO */}
             <StyledEvOccItemRow>
                 {/* TITLE */}
-                <StyledEvOccItemTitle title={item.name}>{item.name}</StyledEvOccItemTitle>
+                <StyledEvOccItemTitle title={item.title}>{item.title}</StyledEvOccItemTitle>
             </StyledEvOccItemRow>
             <StyledEvOccItemRow>
                 {/* DATE */}
@@ -47,13 +57,13 @@ const Event = ({ item }: EventProps) => {
                     <span style={{ fontSize: "14px" }}>{item.date}</span>
                 </div>
             </StyledEvOccItemRow>
-            {item.note && (
+            {item.description && (
                 <StyledEvOccItemRow>
                     {/* NOTE */}
                     <div>
-                        <StyledEvOccItemDescription title={item.note}>
+                        <StyledEvOccItemDescription title={item.description}>
                             <StyledEvOccItemMinorTitle>Note: </StyledEvOccItemMinorTitle>
-                            {item.note}
+                            {item.description}
                         </StyledEvOccItemDescription>
                     </div>
                 </StyledEvOccItemRow>
