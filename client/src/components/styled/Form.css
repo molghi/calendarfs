@@ -1,0 +1,162 @@
+.app__form-box {
+    width: 100%;
+    padding: 1rem;
+    transition: all 0.3s;
+}
+
+.app__form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    row-gap: 3rem;
+
+    /* @media (max-width: #{initial.$md4}px) {
+        row-gap: 2rem;
+    } */
+}
+
+.app__form input::placeholder,
+.app__form textarea::placeholder {
+    opacity: 0.7;
+}
+
+.app__form-header {
+    position: relative;
+}
+
+.app__form-header label {
+    position: absolute;
+    bottom: -0.8rem;
+    font-style: italic;
+    left: 0;
+    font-size: 1.4rem;
+    padding-left: 1rem;
+    opacity: 0.5;
+
+    /* 
+        @media (max-width: #{initial.$md3}px) {
+            padding-left: 0;
+        } */
+
+    /* @media (max-width: #{initial.$md1}px) {
+            font-size: 1.19rem;
+
+            @media (max-width: #{initial.$md3}px) {
+                font-size: 1rem;
+            }
+    } */
+}
+
+.app__form-header label:hover {
+    opacity: 1;
+}
+
+.app__form-title {
+    font-size: 2.9rem;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+
+    /* @media (max-width: #{initial.$md1}px) {
+        padding-top: 2.5rem;
+    }
+    @media (max-width: #{initial.$md4}px) {
+        font-size: 2.3rem;
+        padding-left: 0;
+    } */
+}
+
+.app__form-switch {
+    position: absolute;
+    top: 0;
+    right: 3.5rem;
+    display: flex;
+    align-items: center;
+
+    /* @media (max-width: #{initial.$md1}px) {
+        top: -1rem;
+    } */
+}
+
+.app__form-switch-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1.4rem;
+    transition: box-shadow 0.3s;
+}
+
+.app__form-switch-btn.active {
+    background-color: var(--accent);
+    color: var(--bg);
+}
+
+.app__form-input-box {
+    display: flex;
+    column-gap: 3rem;
+    /* @media (max-width: #{initial.$md4}px) {
+        flex-direction: column;
+        row-gap: 2rem;
+    } */
+}
+
+.app__form-input {
+    width: 100%;
+    /* @media (max-width: #{initial.$md1}px) {
+        font-size: 1.3rem;
+    } */
+}
+
+.app__form-input--description {
+    height: 20rem;
+    min-height: 4rem;
+    max-height: 29rem;
+
+    /* @media (max-width: #{initial.$md1}px) {
+        max-height: 27rem;
+    }
+    @media (max-width: #{initial.$md4}px) {
+        height: 8rem;
+    } */
+}
+
+.app__form-input--description::placeholder {
+    color: inherit;
+}
+
+.app__form-btn {
+    font-size: 1.8rem;
+    transition: box-shadow 0.3s;
+}
+
+.app__form-btn-close {
+    position: absolute;
+    z-index: 1;
+    top: 3px;
+    right: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: box-shadow 0.3s;
+
+    /*
+    @media (max-width: #{initial.$md1}px) {
+        top: -6px;
+    } */
+}
+
+.app__form-btn-close svg {
+    width: 2.2rem;
+}
+
+.app__form-btn-close svg path {
+    fill: var(--accent);
+}
+
+.app__form-btn-close:hover {
+    opacity: 1;
+    background-color: var(--bg);
+    box-shadow: none;
+}
+
+.app__form-btn-close:active {
+    opacity: 0.5;
+}

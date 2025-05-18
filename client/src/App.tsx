@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import MyContext from "./context/MyContext";
 import DayBlock from "./components/DayBlock";
+import Form from "./components/Form";
+import { StyledRoutineMessage } from "./components/styled/Routines.styled";
 
 // Styled Components Theme
 const theme = {
@@ -30,7 +32,7 @@ function App() {
     // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
     if (!context) throw new Error("MyContext must be used within a ContextProvider");
     // Pull out from context
-    const { dayBlockShown, changeMonth } = context;
+    const { dayBlockShown, changeMonth, mode, message, setMessage, localStorageAccentColorKey } = context;
 
     useEffect(() => {
         // Update document title every 60 secs
@@ -47,7 +49,7 @@ function App() {
     }, []);
 
     useEffect(() => {
-        // Hotkeys
+        // Hotkeys: left/right arrows change months
         const handleKeyPress = (event: KeyboardEvent) => {
             if (event.key === "ArrowLeft") changeMonth("prev");
             if (event.key === "ArrowRight") changeMonth("next");
@@ -55,6 +57,28 @@ function App() {
 
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
+    }, []);
+
+    useEffect(() => {
+        // Hide message after some time
+        if (message) {
+            const messageType = message.split(" ")[0];
+            const timer = setTimeout(
+                () => {
+                    setMessage("");
+                },
+                messageType === "error" ? 10000 : 5000
+            );
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
+
+    useEffect(() => {
+        // Check accent color
+        const fromLS = localStorage.getItem(localStorageAccentColorKey);
+        if (fromLS) {
+            document.documentElement.style.setProperty("--accent", fromLS);
+        }
     }, []);
 
     return (
@@ -70,8 +94,27 @@ function App() {
                                 <Routines />
                             </div>
                             <div className="app__col">
-                                {!dayBlockShown && <Events />}
-                                {dayBlockShown && <DayBlock />}
+                                {!dayBlockShown && !mode && <Events />}
+                                {dayBlockShown && !mode && <DayBlock />}
+                                {mode && <Form />}
+                                {message && (
+                                    <div
+                                        style={{
+                                            position: "fixed",
+                                            bottom: "20px",
+                                            right: "20px",
+                                            backgroundColor: "black",
+                                            marginTop: "20px",
+                                            padding: "20px",
+                                            fontSize: "2rem",
+                                            border: "1px solid",
+                                            color: message.split(" ")[0] === "error" ? "red" : "lime",
+                                            borderColor: message.split(" ")[0] === "error" ? "red" : "lime",
+                                        }}
+                                    >
+                                        {message.slice(message.indexOf(" "))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </StyledContainer>

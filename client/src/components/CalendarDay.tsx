@@ -13,6 +13,8 @@ interface CalendarDayProps {
     monthShown?: number;
     dayHighlighted?: string;
     setDayBlockShown?: Dispatch<SetStateAction<string>>;
+    setMode?: Dispatch<SetStateAction<string>>;
+    setDayClicked?: Dispatch<SetStateAction<string>>;
 }
 
 const CalendarDay = ({
@@ -24,6 +26,8 @@ const CalendarDay = ({
     monthShown,
     dayHighlighted,
     setDayBlockShown,
+    setMode,
+    setDayClicked,
 }: CalendarDayProps) => {
     // Bring in my context
     const context = useContext(MyContext);
@@ -47,6 +51,11 @@ const CalendarDay = ({
 
     let result: JSX.Element = <div className="calendar__day"></div>;
 
+    const clickDay = () => {
+        setMode?.("add");
+        setDayClicked?.(dayString);
+    };
+
     // Handle various cases
 
     // WEEK DAY NAME
@@ -68,6 +77,7 @@ const CalendarDay = ({
         if (highlighted) variant = "highlighted";
         result = (
             <StyledCalendarDay
+                onClick={() => clickDay()}
                 onMouseEnter={() => setDayBlockShown?.(dayString)}
                 onMouseLeave={() => setDayBlockShown?.("")}
                 variant={variant}

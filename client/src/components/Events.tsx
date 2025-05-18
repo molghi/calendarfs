@@ -16,8 +16,18 @@ const Events = () => {
     // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
     if (!context) throw new Error("MyContext must be used within a ContextProvider");
     // Pull out from context
-    const { events, occurrences, currentYear, currentMonthNumber, setEventsActiveBlock, eventsActiveBlock, setDayHighlighted } =
-        context;
+    const {
+        events,
+        occurrences,
+        currentYear,
+        currentMonthNumber,
+        setEventsActiveBlock,
+        eventsActiveBlock,
+        setDayHighlighted,
+        deleteOne,
+        setMode,
+        setThingToEdit,
+    } = context;
 
     // Btns
     const switcher = [
@@ -64,7 +74,16 @@ const Events = () => {
                 {/* ITEMS */}
                 <StyledEvOccItems>
                     {blockToShow && blockToShow.length > 0 ? (
-                        blockToShow.map((item, i) => <Event key={i} item={item} setDayHighlighted={setDayHighlighted} />)
+                        blockToShow.map((item, i) => (
+                            <Event
+                                key={i}
+                                item={item}
+                                setDayHighlighted={setDayHighlighted}
+                                deleteOne={deleteOne}
+                                setMode={setMode}
+                                setThingToEdit={setThingToEdit}
+                            />
+                        ))
                     ) : (
                         <div>
                             No entries yet...

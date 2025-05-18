@@ -9,7 +9,7 @@ const CalendarDays = () => {
     // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
     if (!context) throw new Error("MyContext must be used within a ContextProvider");
     // Pull out from context
-    const { currentYear, currentMonthNumber, dayHighlighted, setDayBlockShown } = context;
+    const { currentYear, currentMonthNumber, dayHighlighted, setDayBlockShown, setMode, setDayClicked } = context;
 
     const weekdayNames: Array<string> = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -54,6 +54,8 @@ const CalendarDays = () => {
                                 currentMonth={currentMonth}
                                 dayHighlighted={dayHighlighted}
                                 setDayBlockShown={setDayBlockShown}
+                                setMode={setMode}
+                                setDayClicked={setDayClicked}
                             />
                         );
                     }
