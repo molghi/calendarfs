@@ -12,8 +12,9 @@ function checkNewColor(newColor: string): string {
         .split(",")
         .map((x) => +x.trim());
 
-    // Return green (browser default) if it is too dark
-    if (rgbValues[0] < 40 && rgbValues[1] < 40 && rgbValues[2] < 40) return `rgb(0, 128, 0)`;
+    // Return safe color: the input in rgb or green (browser default) if it is too dark
+    const threshold = 40; // Darkness threshold
+    if (rgbValues[0] < threshold && rgbValues[1] < threshold && rgbValues[2] < threshold) return `rgb(0, 128, 0)`;
 
     return color;
 }

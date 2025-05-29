@@ -29,12 +29,9 @@ const CalendarDay = ({
     setMode,
     setDayClicked,
 }: CalendarDayProps) => {
-    // Bring in my context
-    const context = useContext(MyContext);
-    // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
-    if (!context) throw new Error("MyContext must be used within a ContextProvider");
-    // Pull out from context
-    const { showingNow, events, occurrences, routinesHighlighted } = context;
+    const context = useContext(MyContext); // Bring in my context
+    if (!context) throw new Error("Error using Context"); // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
+    const { showingNow, events, occurrences, routinesHighlighted } = context; // Pull out from context
 
     const dayString: string = `${day}/${monthShown}/${yearShown}`; // Compose day string
 
@@ -52,16 +49,16 @@ const CalendarDay = ({
     let result: JSX.Element = <div className="calendar__day"></div>;
 
     const clickDay = () => {
-        setMode?.("add");
+        setMode?.("add"); // Because setMode is not passed in all cases
         setDayClicked?.(dayString);
     };
 
     // Handle various cases
 
-    // WEEK DAY NAME
+    // RENDER WEEK DAY NAME
     if (type === "weekday") result = <StyledCalendarDay variant="weekday">{day}</StyledCalendarDay>;
 
-    // EMPTY CALENDAR CELL
+    // RENDER EMPTY CALENDAR CELL
     if (type === "empty")
         result = (
             <StyledCalendarDay variant="empty">
@@ -69,7 +66,7 @@ const CalendarDay = ({
             </StyledCalendarDay>
         );
 
-    // DAY CELL
+    // RENDER CALENDAR DAY CELL
     if (type === "day" && currentMonth !== undefined && currentYear !== undefined) {
         let variant: any = "";
         if (isPassed) variant = "passed";

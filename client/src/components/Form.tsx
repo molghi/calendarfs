@@ -1,17 +1,16 @@
 import "./styled/Form.css";
 import { useContext, useRef, useEffect, useState } from "react";
 import MyContext from "../context/MyContext";
+import { closeIcon } from "../utils/icons";
 import { Event, Occurrence } from "../context/MyContext";
 
 const Form = () => {
-    // Bring in my context
-    const context = useContext(MyContext);
-    // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
-    if (!context) throw new Error("MyContext must be used within a ContextProvider");
-    // Pull out from context
-    const { mode, setMode, dayClicked, setMessage, addOne, thingToEdit, editOne } = context;
+    const context = useContext(MyContext); // Bring in my context
+    if (!context) throw new Error("Error using Context"); // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
+    const { mode, setMode, dayClicked, setMessage, addOne, thingToEdit, editOne, formActionBtn } = context; // Pull out from context
 
     const firstInput = useRef<HTMLInputElement>(null);
+
     const [title, setTitle] = useState<string>("");
     const [date, setDate] = useState<string>(dayClicked);
     const [varyingInput, setVaryingInput] = useState<string>(""); // Either time or category depending on type (event/occurrence)
@@ -29,14 +28,14 @@ const Form = () => {
     }, [dayClicked]);
 
     useEffect(() => {
-        // It is edit mode
         if (thingToEdit !== null) {
-            const type: string = thingToEdit.hasOwnProperty("category") ? "occurrence" : "event";
-            // const varyingInputName: string = type === "event" ? "time" : "category";
+            // It is edit mode
+            const type: string = thingToEdit.hasOwnProperty("category") ? "occurrence" : "event"; // Define type
             setTitle(thingToEdit.title);
             setDate(thingToEdit.date);
             setDescription(thingToEdit.description);
             setFormType(type === "event" ? 0 : 1);
+            // Set varying input value
             if (type === "event") {
                 const setting = (thingToEdit as Event).time; // instead of : setVaryingInput(thingToEdit[varyingInputName]);
                 setVaryingInput(setting || "");
@@ -45,7 +44,14 @@ const Form = () => {
                 setVaryingInput(setting || "");
             }
         }
-    }, [thingToEdit]);
+        if (mode === "add") {
+            // It is add mode
+            setTitle("");
+            setDate(dayClicked);
+            setDescription("");
+            setVaryingInput("");
+        }
+    }, [thingToEdit, mode]);
 
     // Capitalise string
     const capitalise = (value: string): string =>
@@ -55,7 +61,7 @@ const Form = () => {
             .join(" ")
             .trim();
 
-    // Submit form
+    // Submit form. Action: add one or edit one
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Validate
@@ -119,6 +125,7 @@ const Form = () => {
         setMessage(`success ${capitalise(type)} ${mode}ed!`); // Show message
     };
 
+    // Switch form to Add Event / Add Occurrence
     const switchButtons = [
         { name: "Event", title: "Switch to Event form" },
         { name: "Occurrence", title: "Switch to Occurrence form" },
@@ -130,11 +137,10 @@ const Form = () => {
                 <form onSubmit={submitForm} className="app__form app__form--add">
                     {/* CLOSE FORM BTN */}
                     <button onClick={() => setMode("")} className="app__form-btn-close" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"></path>
-                        </svg>
+                        {closeIcon}
                     </button>
-                    {/* HEADER */}
+
+                    {/* FORM HEADER */}
                     <div className="app__form-header">
                         <div className="app__form-title">
                             {capitalise(mode)} {formType === 0 ? "Event" : "Occurrence"}
@@ -178,6 +184,7 @@ const Form = () => {
                             onChange={(e) => setTitle(e.target.value)}
                         />
                     </div>
+
                     <div className="app__form-input-box">
                         {/* DATE INPUT */}
                         <input
@@ -188,6 +195,7 @@ const Form = () => {
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
                         />
+
                         {/* VARYING INPUT: EITHER TIME OR CATEGORY */}
                         <input
                             type="text"
@@ -197,6 +205,7 @@ const Form = () => {
                             onChange={(e) => setVaryingInput(e.target.value)}
                         />
                     </div>
+
                     <div className="app__form-input-box">
                         {/* DESCRIPTION INPUT */}
                         <textarea
@@ -208,7 +217,7 @@ const Form = () => {
                     </div>
 
                     {/* ACTION BTN */}
-                    <button className="app__form-btn" type="submit">
+                    <button ref={formActionBtn} className="app__form-btn" type="submit">
                         {capitalise(mode)}
                     </button>
                 </form>

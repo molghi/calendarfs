@@ -11,11 +11,8 @@ import {
 } from "./styled/Events.styled";
 
 const Events = () => {
-    // Bring in my context
-    const context = useContext(MyContext);
-    // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
-    if (!context) throw new Error("MyContext must be used within a ContextProvider");
-    // Pull out from context
+    const context = useContext(MyContext); // Bring in my context
+    if (!context) throw new Error("Error using Context"); // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
     const {
         events,
         occurrences,
@@ -27,9 +24,9 @@ const Events = () => {
         deleteOne,
         setMode,
         setThingToEdit,
-    } = context;
+    } = context; // Pull out from context
 
-    // Btns
+    // UI Btns
     const switcher = [
         { name: "Events", description: "Scheduled and specific activities" },
         { name: "Occurrences", description: "General things that happened, activities or notes" },
@@ -43,7 +40,7 @@ const Events = () => {
         .filter((occ) => +occ.date.split("/")[1] === currentMonthNumber && +occ.date.split("/")[2] === currentYear)
         .sort((a, b) => +a.date.split("/")[0] - +b.date.split("/")[0]);
 
-    // Block to show is either events or occurrences
+    // blockToShow is either events or occurrences
     const blockToShow = eventsActiveBlock === 0 ? eventsThisMonth : occurrencesThisMonth;
 
     return (
@@ -51,11 +48,14 @@ const Events = () => {
             <StyledEvOcc>
                 {/* HEADER */}
                 <StyledEvOccBox>
-                    {/* TITLE */}
+                    {/* BLOCK TITLE */}
                     <StyledEvOccTitle>
                         {eventsActiveBlock === 0 ? "Events" : "Occurrences"} This Month
-                        <span title="4 events this month">{blockToShow.length}</span>
+                        <span title={`${blockToShow.length} ${blockToShow.length === 1 ? "event" : "events"} this month`}>
+                            {blockToShow.length}
+                        </span>
                     </StyledEvOccTitle>
+
                     {/* BUTTONS */}
                     <StyledEvOccSwitch>
                         {switcher.map((btn, i) => (
@@ -71,7 +71,7 @@ const Events = () => {
                     </StyledEvOccSwitch>
                 </StyledEvOccBox>
 
-                {/* ITEMS */}
+                {/* EVENT ITEMS */}
                 <StyledEvOccItems>
                     {blockToShow && blockToShow.length > 0 ? (
                         blockToShow.map((item, i) => (

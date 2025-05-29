@@ -1,5 +1,4 @@
-import { createContext, useState, ReactNode, Dispatch, SetStateAction } from "react";
-import testData from "../../calendar-test-data.json";
+import { createContext, useState, useRef, ReactNode, Dispatch, SetStateAction, RefObject } from "react";
 
 // Define props type for event object
 export interface Event {
@@ -21,7 +20,7 @@ export interface Occurrence {
     id?: number;
 }
 
-// Define context value type
+// Define context value types
 interface MyContextType {
     currentYear: number;
     setCurrentYear: Dispatch<SetStateAction<number>>;
@@ -60,6 +59,10 @@ interface MyContextType {
     localStorageEventsKey: string;
     localStorageOccurrencesKey: string;
     localStorageAccentColorKey: string;
+    formActionBtn: RefObject<HTMLButtonElement>;
+    weekStart: string;
+    setWeekStart: Dispatch<SetStateAction<string>>;
+    localStorageWeekStartKey: string;
 }
 
 // Provide default value to createContext
@@ -72,8 +75,14 @@ interface ContextProviderProps {
 
 // Context
 export const ContextProvider = ({ children }: ContextProviderProps) => {
-    const [events, setEvents] = useState<Event[]>(testData.events); // All events
-    const [occurrences, setOccurrences] = useState<Occurrence[]>(testData.occurrences); // All occurrences
+    const localStorageEventsKey: string = "calendar_events";
+    const localStorageOccurrencesKey: string = "calendar_occurrences";
+    const localStorageWeekStartKey: string = "calendar_week_start";
+
+    const [events, setEvents] = useState<Event[]>(JSON.parse(localStorage.getItem(localStorageEventsKey) ?? "[]")); // All events; nullish coalescing operator because localStorage.getItem() can return null
+    const [occurrences, setOccurrences] = useState<Occurrence[]>(
+        JSON.parse(localStorage.getItem(localStorageOccurrencesKey) ?? "[]")
+    ); // All occurrences
     const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
     const [currentMonthNumber, setCurrentMonthNumber] = useState<number>(new Date().getMonth() + 1); // Not zero-based
     const [routinesHighlighted, setRoutinesHighlighted] = useState<string[]>([]);
@@ -85,14 +94,18 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
     const [message, setMessage] = useState<string>(""); // Format: "type messageTextContentHere" where type is either 'error' or 'success'
     const [thingToEdit, setThingToEdit] = useState<Event | Occurrence | null>(null); // Holds either one event obj or occurrence obj
     const [accentColor, setAccentColor] = useState<string>("rgb(56, 101, 140)");
+    const [weekStart, setWeekStart] = useState<string>(
+        JSON.parse(localStorage.getItem(localStorageWeekStartKey) ?? JSON.stringify("Sun"))
+    );
 
-    const localStorageEventsKey: string = "calendar_events";
-    const localStorageOccurrencesKey: string = "calendar_occurrences";
     const localStorageAccentColorKey: string = "calendar_accent_color";
 
+    const formActionBtn = useRef<HTMLButtonElement>(null);
+
+    // Get this month name
     const currentMonthWord: string = new Intl.DateTimeFormat("en-GB", { dateStyle: "full" })
         .format(new Date(currentYear, currentMonthNumber - 1, 1))
-        .split(" ")[2]; // Get how this month is called
+        .split(" ")[2];
 
     // Define season
     let currentSeason: string;
@@ -127,7 +140,7 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
     const nowMonth: number = new Date().getMonth() + 1; // What is
     const showingNow: boolean = currentYear === nowYear && currentMonthNumber === nowMonth; // Showing what now is?
 
-    // Throw back to now-month, now-year
+    // Jump back to now-month, now-year
     function backToNow(): void {
         setCurrentYear(nowYear);
         setCurrentMonthNumber(nowMonth);
@@ -135,23 +148,48 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
 
     // Delete one event or occurrence
     function deleteOne(itemIdentifier: string, itemType: string): void {
-        const answer = window.confirm(`Are you sure you want to delete this ${itemType}?`);
-        if (!answer) return;
-        if (itemType === "event") setEvents((prev) => prev.filter((evObj) => evObj.added !== itemIdentifier));
-        if (itemType === "occurrence") setOccurrences((prev) => prev.filter((occObj) => occObj.added !== itemIdentifier));
+        const answer = window.confirm(`Are you sure you want to delete this ${itemType}?`); // Prompt
+        if (!answer) return; // Check
+        // Update state and LS
+        if (itemType === "event") {
+            setEvents((prev) => {
+                const newEvents = prev.filter((evObj) => evObj.added !== itemIdentifier);
+                localStorage.setItem(localStorageEventsKey, JSON.stringify(newEvents)); // Register to local storage
+                return newEvents;
+            });
+        }
+        if (itemType === "occurrence") {
+            setOccurrences((prev) => {
+                const newOccurrences = prev.filter((occObj) => occObj.added !== itemIdentifier);
+                localStorage.setItem(localStorageOccurrencesKey, JSON.stringify(newOccurrences));
+                return newOccurrences;
+            });
+        }
     }
 
     // Add one event or occurrence
     function addOne(itemObj: Event | Occurrence, itemType: string): void {
-        if (itemType === "event") setEvents((prev) => [...prev, itemObj]);
-        if (itemType === "occurrence") setOccurrences((prev) => [...prev, itemObj]);
+        if (itemType === "event") {
+            setEvents((prev) => {
+                const newEvents = [...prev, itemObj];
+                localStorage.setItem(localStorageEventsKey, JSON.stringify(newEvents));
+                return newEvents;
+            });
+        }
+        if (itemType === "occurrence") {
+            setOccurrences((prev) => {
+                const newOccurrences = [...prev, itemObj];
+                localStorage.setItem(localStorageOccurrencesKey, JSON.stringify(newOccurrences));
+                return newOccurrences;
+            });
+        }
     }
 
     // Edit one event or occurrence
     function editOne(itemObj: Event | Occurrence, itemType: string): void {
-        if (itemType === "event")
-            setEvents((prev) =>
-                prev.map((evObj) => {
+        if (itemType === "event") {
+            setEvents((prev) => {
+                const newEvents = prev.map((evObj) => {
                     if (evObj.id === itemObj.id) {
                         return {
                             ...evObj,
@@ -162,11 +200,14 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
                             title: itemObj.title,
                         };
                     } else return evObj;
-                })
-            );
-        if (itemType === "occurrence")
-            setOccurrences((prev) =>
-                prev.map((occObj) => {
+                });
+                localStorage.setItem(localStorageEventsKey, JSON.stringify(newEvents));
+                return newEvents;
+            });
+        }
+        if (itemType === "occurrence") {
+            setOccurrences((prev) => {
+                const newOccurrences = prev.map((occObj) => {
                     if (occObj.id === itemObj.id) {
                         return {
                             ...occObj,
@@ -177,8 +218,11 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
                             title: itemObj.title,
                         };
                     } else return occObj;
-                })
-            );
+                });
+                localStorage.setItem(localStorageOccurrencesKey, JSON.stringify(newOccurrences));
+                return newOccurrences;
+            });
+        }
     }
 
     return (
@@ -221,6 +265,10 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
                 localStorageEventsKey,
                 localStorageOccurrencesKey,
                 localStorageAccentColorKey,
+                formActionBtn,
+                weekStart,
+                setWeekStart,
+                localStorageWeekStartKey,
             }}
         >
             {children}

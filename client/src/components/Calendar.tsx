@@ -6,24 +6,21 @@ import { useContext } from "react";
 import MyContext from "../context/MyContext";
 
 const Calendar = () => {
-    // Bring in my context
-    const context = useContext(MyContext);
-    // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
-    if (!context) throw new Error("MyContext must be used within a ContextProvider");
-    // Pull out from context
-    const { showingNow, backToNow } = context;
+    const context = useContext(MyContext); // Bring in my context
+    if (!context) throw new Error("Error using Context"); // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
+    const { showingNow, backToNow } = context; // Pull out from context
 
     return (
         <div className="calendar">
             <StyledContainer>
                 <StyledCalendarInner>
-                    {/* HEADER */}
+                    {/* CALENDAR HEADER */}
                     <CalendarHeader />
 
-                    {/* ALL THE DAYS OF THE MONTH */}
+                    {/* BOX WITH ALL THE DAYS OF THE MONTH */}
                     <CalendarDays />
 
-                    {/* BTN */}
+                    {/* BTN BACK TO NOW */}
                     {!showingNow && (
                         <StyledCalendarNowBtnBox>
                             <button onClick={() => backToNow()}>Back to Now</button>

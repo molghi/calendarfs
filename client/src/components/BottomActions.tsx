@@ -1,48 +1,79 @@
 // import "./styled/BottomActions.css";
 import { StyledActions, StyledActionsBtn, StyledActionsMenu, StyledActionsAction } from "./styled/BottomActions.styled";
 import checkNewColor from "../utils/checkNewColor";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import MyContext from "../context/MyContext";
+import exportAsJson from "../utils/exportAsJson";
+import importJson from "../utils/importJson";
+import { actionsIcon } from "../utils/icons";
 
 const BottomActions = () => {
-    // Bring in my context
-    const context = useContext(MyContext);
-    // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
-    if (!context) throw new Error("MyContext must be used within a ContextProvider");
-    // Pull out from context
-    const { localStorageAccentColorKey } = context;
+    const context = useContext(MyContext); // Bring in my context
+    if (!context) throw new Error("Error using Context"); // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
+    const {
+        localStorageAccentColorKey,
+        localStorageEventsKey,
+        localStorageOccurrencesKey,
+        setMessage,
+        events,
+        occurrences,
+        setEvents,
+        setOccurrences,
+        weekStart,
+        setWeekStart,
+        localStorageWeekStartKey,
+    } = context; // Pull out from context
 
-    const actions = [
+    const importerEl = useRef<HTMLInputElement>(null);
+
+    interface Action {
+        name: string;
+        title: string;
+    }
+
+    // Define available actions
+    const actions: Array<Action> = [
         { name: "Change color", title: "Change the accent color of the interface" },
         { name: "Export", title: "Export as JSON" },
         { name: "Import", title: "Import as JSON" },
+        {
+            name: `Start on ${weekStart === "Sun" ? "Mon" : "Sun"}`,
+            title: `Change week start to ${weekStart === "Sun" ? "Mon" : "Sun"}day`,
+        },
     ];
 
+    // Handle action on click
     const handleAction = (action: string) => {
         if (action === "Change color") {
-            const newColor = prompt(`Enter new interface color`);
-            if (!newColor || !newColor.trim()) return;
-            const checkedColor = checkNewColor(newColor);
-            // setAccentColor(checkedColor);
+            const newColor: string | null = prompt(`Enter new interface color`); // Prompt
+            if (!newColor || !newColor.trim()) return; // Check
+            const checkedColor: string = checkNewColor(newColor); // Return safe color
             localStorage.setItem(localStorageAccentColorKey, checkedColor); // Register to LS
-            document.documentElement.style.setProperty("--accent", checkedColor); // Change styles
+            document.documentElement.style.setProperty("--accent", checkedColor); // Change styles visibly
         }
         if (action === "Export") {
-            console.log(`Export`);
+            // Get both from LS
+            const eventsFromLS = JSON.parse(localStorage.getItem(localStorageEventsKey) ?? "[]");
+            const occurrencesFromLS = JSON.parse(localStorage.getItem(localStorageOccurrencesKey) ?? "[]");
+            const finalObj = { events: eventsFromLS, occurrences: occurrencesFromLS }; // Compose final object
+            exportAsJson(finalObj); // Export
         }
         if (action === "Import") {
-            console.log(`Import`);
+            importerEl.current && importerEl.current.click();
+        }
+        if (action.startsWith("Start on")) {
+            setWeekStart((prev) => {
+                const newChoice = prev === "Mon" ? "Sun" : "Mon";
+                localStorage.setItem(localStorageWeekStartKey, JSON.stringify(newChoice)); // Register to LS
+                return newChoice;
+            });
         }
     };
 
     return (
         <StyledActions className="bottom-actions">
-            {/* BTN */}
-            <StyledActionsBtn className="actions-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"></path>
-                </svg>
-            </StyledActionsBtn>
+            {/* BTN, ACTIONS ICON */}
+            <StyledActionsBtn className="actions-btn">{actionsIcon}</StyledActionsBtn>
 
             {/* ACTIONS MENU */}
             <StyledActionsMenu className="actions-menu">
@@ -51,7 +82,24 @@ const BottomActions = () => {
                         {action.name}
                     </StyledActionsAction>
                 ))}
-                <input type="file" style={{ display: "none" }} />
+                <input
+                    onChange={(e) =>
+                        importJson({
+                            event: e,
+                            setMessage,
+                            importerEl,
+                            events,
+                            occurrences,
+                            setEvents,
+                            setOccurrences,
+                            localStorageEventsKey,
+                            localStorageOccurrencesKey,
+                        })
+                    }
+                    ref={importerEl}
+                    type="file"
+                    style={{ display: "none" }}
+                />
             </StyledActionsMenu>
         </StyledActions>
     );

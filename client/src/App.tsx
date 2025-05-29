@@ -6,12 +6,12 @@ import BottomActions from "./components/BottomActions";
 import { GlobalStyles } from "./components/styled/GlobalStyles"; // initial styling
 import { StyledContainer } from "./components/styled/Container.styled";
 import { ThemeProvider } from "styled-components";
-import { useEffect } from "react";
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
 import MyContext from "./context/MyContext";
 import DayBlock from "./components/DayBlock";
 import Form from "./components/Form";
 import { StyledRoutineMessage } from "./components/styled/Routines.styled";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
 
 // Styled Components Theme
 const theme = {
@@ -32,7 +32,18 @@ function App() {
     // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
     if (!context) throw new Error("MyContext must be used within a ContextProvider");
     // Pull out from context
-    const { dayBlockShown, changeMonth, mode, message, setMessage, localStorageAccentColorKey } = context;
+    const { dayBlockShown, changeMonth, mode, message, setMessage, localStorageAccentColorKey, formActionBtn } = context;
+
+    const controls = useAnimation(); // Framer Motion
+
+    useEffect(() => {
+        // Framer Motion: subtly animate on dayBlockShown change
+        controls.set({ opacity: 0, transition: { duration: 0 } }); // Immediate opacity drop with no transition
+        controls.start({
+            opacity: 1,
+            transition: { duration: 0.5 },
+        });
+    }, [dayBlockShown]);
 
     useEffect(() => {
         // Update document title every 60 secs
@@ -41,7 +52,7 @@ function App() {
             const day = now.getDate();
             const month = now.getMonth() + 1;
             const year = now.getFullYear().toString().slice(-2);
-            document.title = `🛠 Calendar — ${day}/${month}/${year}`;
+            document.title = `Calendar — ${day}/${month}/${year}`;
         };
         updateTitle();
         const timer = setInterval(updateTitle, 60000); // Update every minute
@@ -49,15 +60,18 @@ function App() {
     }, []);
 
     useEffect(() => {
-        // Hotkeys: left/right arrows change months
+        // Hotkeys
         const handleKeyPress = (event: KeyboardEvent) => {
-            if (event.key === "ArrowLeft") changeMonth("prev");
-            if (event.key === "ArrowRight") changeMonth("next");
+            // Left/right arrows change months (when form isn't shown)
+            if (event.key === "ArrowLeft" && mode === "") changeMonth("prev");
+            if (event.key === "ArrowRight" && mode === "") changeMonth("next");
+            // Enter submits form
+            if (event.key === "Enter" && mode !== "") formActionBtn?.current?.click();
         };
 
         window.addEventListener("keydown", handleKeyPress);
         return () => window.removeEventListener("keydown", handleKeyPress);
-    }, []);
+    }, [mode]);
 
     useEffect(() => {
         // Hide message after some time
@@ -90,12 +104,53 @@ function App() {
                     <StyledContainer>
                         <div className="app__inner">
                             <div className="app__col">
-                                <Calendar />
-                                <Routines />
+                                <AnimatePresence>
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.5 }}
+                                    >
+                                        <Calendar />
+                                    </motion.div>
+                                </AnimatePresence>
+                                <AnimatePresence>
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.5, delay: 0.5 }}
+                                    >
+                                        <Routines />
+                                    </motion.div>
+                                </AnimatePresence>
                             </div>
                             <div className="app__col">
-                                {!dayBlockShown && !mode && <Events />}
-                                {dayBlockShown && !mode && <DayBlock />}
+                                {!dayBlockShown && !mode && (
+                                    <AnimatePresence>
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.5, delay: 0.3 }}
+                                        >
+                                            <Events />
+                                        </motion.div>
+                                    </AnimatePresence>
+                                )}
+                                {dayBlockShown && !mode && (
+                                    <AnimatePresence>
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            // animate={{ opacity: 1 }}
+                                            animate={controls}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.5 }}
+                                        >
+                                            <DayBlock />
+                                        </motion.div>
+                                    </AnimatePresence>
+                                )}
                                 {mode && <Form />}
                                 {message && (
                                     <div
