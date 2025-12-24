@@ -63,6 +63,9 @@ interface MyContextType {
     weekStart: string;
     setWeekStart: Dispatch<SetStateAction<string>>;
     localStorageWeekStartKey: string;
+    localStorageAddFormLastChoiceKey: string;
+    addFormLastChoice: string;
+    setAddFormLastChoice: Dispatch<SetStateAction<string>>;
 }
 
 // Provide default value to createContext
@@ -78,6 +81,7 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
     const localStorageEventsKey: string = "calendar_events";
     const localStorageOccurrencesKey: string = "calendar_occurrences";
     const localStorageWeekStartKey: string = "calendar_week_start";
+    const localStorageAddFormLastChoiceKey: string = "calendar_add_form_last_choice";
 
     const [events, setEvents] = useState<Event[]>(JSON.parse(localStorage.getItem(localStorageEventsKey) ?? "[]")); // All events; nullish coalescing operator because localStorage.getItem() can return null
     const [occurrences, setOccurrences] = useState<Occurrence[]>(
@@ -96,6 +100,9 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
     const [accentColor, setAccentColor] = useState<string>("rgb(56, 101, 140)");
     const [weekStart, setWeekStart] = useState<string>(
         JSON.parse(localStorage.getItem(localStorageWeekStartKey) ?? JSON.stringify("Sun"))
+    );
+    const [addFormLastChoice, setAddFormLastChoice] = useState<string>(
+        JSON.parse(localStorage.getItem(localStorageAddFormLastChoiceKey) ?? JSON.stringify("Event"))
     );
 
     const localStorageAccentColorKey: string = "calendar_accent_color";
@@ -269,6 +276,9 @@ export const ContextProvider = ({ children }: ContextProviderProps) => {
                 weekStart,
                 setWeekStart,
                 localStorageWeekStartKey,
+                localStorageAddFormLastChoiceKey,
+                addFormLastChoice,
+                setAddFormLastChoice,
             }}
         >
             {children}

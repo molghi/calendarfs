@@ -67,7 +67,7 @@ const Event = ({ item, setDayHighlighted, deleteOne, setMode, setThingToEdit }: 
                 {/* DATE */}
                 <div>
                     <StyledEvOccItemMinorTitle>Date: </StyledEvOccItemMinorTitle>
-                    <span style={{ fontSize: "14px" }}>{item.date}</span>
+                    <span style={{ fontSize: "14px", fontStyle: "italic", opacity: 0.6 }}>{item.date}</span>
                 </div>
             </StyledEvOccItemRow>
 
@@ -77,7 +77,7 @@ const Event = ({ item, setDayHighlighted, deleteOne, setMode, setThingToEdit }: 
                     <div>
                         <StyledEvOccItemDescription title={item.description}>
                             <StyledEvOccItemMinorTitle>Note: </StyledEvOccItemMinorTitle>
-                            {item.description}
+                            <span style={{ fontStyle: "italic", opacity: 0.6 }}>{item.description}</span>
                         </StyledEvOccItemDescription>
                     </div>
                 </StyledEvOccItemRow>

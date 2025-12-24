@@ -90,12 +90,20 @@ export const StyledEvOccSwitch = styled.div`
         cursor: pointer;
         transition: box-shadow 0.3s;
 
+        &:first-child {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+
         &:last-child {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
             border-left: none;
         }
 
         &:hover {
             background-color: var(--accent);
+            opacity: 0.7;
         }
 
         &.active {
@@ -111,7 +119,8 @@ export const StyledEvOccItems = styled.div`
     display: flex;
     flex-direction: column;
     row-gap: 1.5rem;
-    padding-right: 0.7rem;
+    // padding-right: 0.7rem;
+    padding-right: 1.2rem;
     height: 100%;
 `;
 
@@ -119,11 +128,14 @@ export const StyledEvOccItems = styled.div`
 
 export const StyledEvOccItem = styled.div`
     padding: 1rem 1.5rem;
-    background-color: #151515;
+    // background-color: #151515;
+    background-color: #222;
     position: relative;
+    border-radius: 7px;
+    transition: all 0.3s;
 
     &:hover {
-        background-color: #222;
+        background-color: #333;
 
         .btns {
             opacity: 0.5;
@@ -136,8 +148,8 @@ export const StyledEvOccItem = styled.div`
 
 export const StyledEvOccItemBtns = styled.div`
     position: absolute;
-    top: 1px;
-    right: 1px;
+    top: 5px;
+    right: 5px;
     display: flex;
     column-gap: 0.7rem;
     opacity: 0;
@@ -151,6 +163,7 @@ export const StyledEvOccItemBtn = styled.button`
     padding: 0;
     border: none;
     transition: none;
+    transition: all 0.2s;
 
     svg {
         width: 1.5rem;
@@ -178,9 +191,18 @@ export const StyledEvOccItemRow = styled.div`
     display: flex;
     align-items: center;
     column-gap: 2rem;
+    transition: all 0.2s;
 
     div {
         flex: 1 1 50%;
+    }
+
+    span {
+        transition: all 0.2s;
+    }
+
+    span:hover {
+        opacity: 1 !important;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -210,8 +232,10 @@ export const StyledEvOccItemTitle = styled.div`
 // ================================================================================================
 
 export const StyledEvOccItemMinorTitle = styled.span`
-    opacity: 0.5;
+    opacity: 0.3;
+    color: white;
     font-size: 1.6rem;
+    font-style: italic;
 
     @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
         font-size: 1.4rem;

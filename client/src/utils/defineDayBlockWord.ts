@@ -32,17 +32,25 @@ const defineDayBlockWord = (daysApart: number, now: Date, theDate: Date): string
 
     // MONTHS
     // If in more than one week (and months are defined and years aren't)
-    if (duration.days && duration.days > 7 && duration.months && !duration.years) {
-        whenWasWillBe += ` (${duration.months} ${duration.months === 1 ? "month" : "months"}, ${duration.days} ${
-            duration.days === 1 ? "day" : "days"
+
+    // if (duration.days && duration.days > 7 && duration.months && !duration.years) {
+    if (duration.months && !duration.years) {
+        // whenWasWillBe += ` (${duration.months} ${duration.months === 1 ? "month" : "months"}, ${duration.days} ${
+        //     duration.days === 1 ? "day" : "days"
+        // })`;
+        const dayWord = Math.abs(duration.days || 0) === 1 ? "day" : "days";
+        whenWasWillBe += ` (${Math.abs(duration.months || 0)} ${Math.abs(duration.months || 0) === 1 ? "month" : "months"}${
+            duration.days ? ", " + Math.abs(duration.days || 0) + " " + dayWord : ""
         })`;
     }
+
     // If was more than one week ago (and months are defined and years aren't)
-    if (duration.days && duration.days < -7 && duration.months && !duration.years) {
-        whenWasWillBe += ` (${Math.abs(duration.months)} ${duration.months === -1 ? "month" : "months"}, ${Math.abs(
-            duration.days
-        )} ${duration.days === -1 ? "day" : "days"})`;
-    }
+    // if (duration.days && duration.days < -7 && duration.months && !duration.years) {
+    //     console.log(2);
+    //     whenWasWillBe += ` (${Math.abs(duration.months)} ${duration.months === -1 ? "month" : "months"}, ${Math.abs(
+    //         duration.days
+    //     )} ${duration.days === -1 ? "day" : "days"})`;
+    // }
 
     // YEARS
     // If in more than one week (and years are defined)

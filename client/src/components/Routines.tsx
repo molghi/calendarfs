@@ -11,7 +11,9 @@ const Routines = () => {
     const { occurrences, currentMonthNumber, currentYear, setRoutinesHighlighted } = context; // Pull out from context
 
     // Get all occurrences that happened this month
-    const occurrencesThisMonth: any[] = occurrences.filter((occ) => +occ.date.split("/")[1] === currentMonthNumber);
+    const occurrencesThisMonth: any[] = occurrences.filter(
+        (occ) => +occ.date.split("/")[1] === currentMonthNumber && +occ.date.split("/")[2] === currentYear
+    );
 
     // Get just their types (categories) as a set, minus those that have no category specified
     const occurrencesTypes: Array<string | undefined> = [

@@ -239,6 +239,13 @@ export const StyledCalendarDay = styled.div.withConfig({
                     color: var(--bg);
                     opacity: 1;
                 } 
+
+            span.events {
+                color: var(--accent);
+                &:after {
+                    border-top-color: var(--bg);
+                }
+            }
         `;
 
         if (props.variant === "highlighted")

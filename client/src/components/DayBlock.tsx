@@ -34,6 +34,9 @@ const DayBlock = () => {
     // Define the word(s) -- when something was or will be
     let whenWasWillBe: string = defineDayBlockWord(daysApart, now, theDate);
 
+    // console.log("1", daysApart, now, theDate);
+    // console.log("2", whenWasWillBe);
+
     return (
         <>
             <div className="day-block">
@@ -77,7 +80,7 @@ const DayBlock = () => {
                                     <div className="day-block__event-description">
                                         <span>
                                             <span>Note:</span>
-                                            {ev.description}
+                                            <span>{ev.description}</span>
                                         </span>
                                     </div>
                                 )}
@@ -108,7 +111,7 @@ const DayBlock = () => {
                                     <div className="day-block__occurrence-description">
                                         <span>
                                             <span>Note:</span>
-                                            {occ.description}
+                                            <span>{occ.description}</span>
                                         </span>
                                     </div>
                                 )}

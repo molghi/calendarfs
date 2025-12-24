@@ -7,7 +7,19 @@ import { Event, Occurrence } from "../context/MyContext";
 const Form = () => {
     const context = useContext(MyContext); // Bring in my context
     if (!context) throw new Error("Error using Context"); // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
-    const { mode, setMode, dayClicked, setMessage, addOne, thingToEdit, editOne, formActionBtn } = context; // Pull out from context
+    const {
+        mode,
+        setMode,
+        dayClicked,
+        setMessage,
+        addOne,
+        thingToEdit,
+        editOne,
+        formActionBtn,
+        setAddFormLastChoice,
+        addFormLastChoice,
+        localStorageAddFormLastChoiceKey,
+    } = context; // Pull out from context
 
     const firstInput = useRef<HTMLInputElement>(null);
 
@@ -15,12 +27,20 @@ const Form = () => {
     const [date, setDate] = useState<string>(dayClicked);
     const [varyingInput, setVaryingInput] = useState<string>(""); // Either time or category depending on type (event/occurrence)
     const [description, setDescription] = useState<string>("");
-    const [formType, setFormType] = useState<number>(0); // 0 for Event, 1 for Occurrence
+    //const [formType, setFormType] = useState<number>(0); // 0 for Event, 1 for Occurrence
+    const [formType, setFormType] = useState<number>(
+        JSON.parse(localStorage.getItem(localStorageAddFormLastChoiceKey) || "") === "Event" ? 0 : 1
+    ); // 0 for Event, 1 for Occurrence
 
     useEffect(() => {
         // Focus first input
         if (firstInput.current) firstInput.current.focus();
     }, [formType, date]);
+
+    useEffect(() => {
+        const type = formType === 0 ? "Event" : "Occurrence";
+        localStorage.setItem(localStorageAddFormLastChoiceKey, JSON.stringify(type)); // Add Form's last choice
+    }, [formType]);
 
     useEffect(() => {
         // Change 'date'
@@ -199,7 +219,9 @@ const Form = () => {
                         {/* VARYING INPUT: EITHER TIME OR CATEGORY */}
                         <input
                             type="text"
-                            className={`app__form-input app__form-input--${formType === 0 ? "time" : "category"}`}
+                            className={`app__form-input app__form-input--${formType === 0 ? "time" : "category"} ${
+                                formType === 0 ? "hidden" : ""
+                            }`}
                             placeholder={formType === 0 ? `Time (optional)` : `Category (optional)`}
                             value={varyingInput}
                             onChange={(e) => setVaryingInput(e.target.value)}

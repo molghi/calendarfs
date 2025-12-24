@@ -51,6 +51,7 @@ export const StyledRoutineListItem = styled.li`
             background-color: var(--accent);
             color: var(--bg);
             box-shadow: 0 0 1rem var(--accent);
+            border-radius: 5px;
         }
     }
 `;
@@ -59,7 +60,8 @@ export const StyledRoutineListItem = styled.li`
 
 export const StyledRoutineMessage = styled.div`
     margin-top: 2rem;
-    font-size: 1.4rem;
+    // font-size: 1.4rem;
+    font-size: 1.45rem;
     font-style: italic;
     opacity: 0.5;
     transition: all 0.2s;

@@ -32,9 +32,26 @@ function App() {
     // Null-check before deconstructing -- guard against useContext(MyContext) returning undefined
     if (!context) throw new Error("MyContext must be used within a ContextProvider");
     // Pull out from context
-    const { dayBlockShown, changeMonth, mode, message, setMessage, localStorageAccentColorKey, formActionBtn } = context;
+    const {
+        dayBlockShown,
+        changeMonth,
+        mode,
+        message,
+        setMessage,
+        localStorageAccentColorKey,
+        formActionBtn,
+        localStorageAddFormLastChoiceKey,
+    } = context;
 
     const controls = useAnimation(); // Framer Motion
+
+    useEffect(() => {
+        const fromLS = localStorage.getItem(localStorageAddFormLastChoiceKey);
+
+        if (!fromLS) {
+            localStorage.setItem(localStorageAddFormLastChoiceKey, JSON.stringify("Event"));
+        }
+    }, []);
 
     useEffect(() => {
         // Framer Motion: subtly animate on dayBlockShown change
@@ -152,23 +169,36 @@ function App() {
                                     </AnimatePresence>
                                 )}
                                 {mode && <Form />}
+
                                 {message && (
-                                    <div
-                                        style={{
-                                            position: "fixed",
-                                            bottom: "20px",
-                                            right: "20px",
-                                            backgroundColor: "black",
-                                            marginTop: "20px",
-                                            padding: "20px",
-                                            fontSize: "2rem",
-                                            border: "1px solid",
-                                            color: message.split(" ")[0] === "error" ? "red" : "lime",
-                                            borderColor: message.split(" ")[0] === "error" ? "red" : "lime",
-                                        }}
-                                    >
-                                        {message.slice(message.indexOf(" "))}
-                                    </div>
+                                    <AnimatePresence>
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <div
+                                                className="flash-message"
+                                                style={{
+                                                    position: "fixed",
+                                                    bottom: "20px",
+                                                    right: "20px",
+                                                    backgroundColor: "black",
+                                                    marginTop: "20px",
+                                                    padding: "20px",
+                                                    fontSize: "2rem",
+                                                    border: "1px solid",
+                                                    borderRadius: "7px",
+                                                    transition: "all .3s",
+                                                    color: message.split(" ")[0] === "error" ? "red" : "lime",
+                                                    borderColor: message.split(" ")[0] === "error" ? "red" : "lime",
+                                                }}
+                                            >
+                                                {message.slice(message.indexOf(" "))}
+                                            </div>
+                                        </motion.div>
+                                    </AnimatePresence>
                                 )}
                             </div>
                         </div>
