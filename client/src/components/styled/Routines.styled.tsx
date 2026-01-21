@@ -54,6 +54,25 @@ export const StyledRoutineListItem = styled.li`
             border-radius: 5px;
         }
     }
+
+    i:first-child {
+        opacity: 0.65;
+        transition: all 0.3s;
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    i:last-child {
+        font-style: normal;
+        margin-left: 10px;
+        color: white;
+        opacity: 0.3;
+        transition: all 0.3s;
+        &:hover {
+            opacity: 1;
+        }
+    }
 `;
 
 // ================================================================================================

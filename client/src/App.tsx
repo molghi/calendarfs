@@ -98,7 +98,7 @@ function App() {
                 () => {
                     setMessage("");
                 },
-                messageType === "error" ? 10000 : 5000
+                messageType === "error" ? 10000 : 5000,
             );
             return () => clearTimeout(timer);
         }

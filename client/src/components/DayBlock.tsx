@@ -34,9 +34,6 @@ const DayBlock = () => {
     // Define the word(s) -- when something was or will be
     let whenWasWillBe: string = defineDayBlockWord(daysApart, now, theDate);
 
-    // console.log("1", daysApart, now, theDate);
-    // console.log("2", whenWasWillBe);
-
     return (
         <>
             <div className="day-block">
@@ -96,27 +93,32 @@ const DayBlock = () => {
                     </div>
                     {/* ELEMENTS */}
                     {occurrencesThisDay.length === 0 && <div className="day-block__msg">No entries</div>}
-                    {occurrencesThisDay &&
-                        occurrencesThisDay.length > 0 &&
-                        occurrencesThisDay.map((occ, i) => (
-                            <div key={i} className="day-block__occurrence">
-                                <div className="day-block__occurrence-title">{occ.title}</div>
-                                {occ.category && (
-                                    <div className="day-block__occurrence-category">
-                                        <span>Category:</span>
-                                        <span>{occ.category}</span>
-                                    </div>
-                                )}
-                                {occ.description && (
-                                    <div className="day-block__occurrence-description">
-                                        <span>
-                                            <span>Note:</span>
-                                            <span>{occ.description}</span>
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+
+                    <div
+                        className={`${occurrencesThisDay.length > 4 ? "day-block__occurrences-items--grid" : "day-block__occurrences-items"}`}
+                    >
+                        {occurrencesThisDay &&
+                            occurrencesThisDay.length > 0 &&
+                            occurrencesThisDay.map((occ, i) => (
+                                <div key={i} className={`day-block__occurrence`}>
+                                    <div className="day-block__occurrence-title">{occ.title}</div>
+                                    {occ.category && (
+                                        <div className="day-block__occurrence-category">
+                                            <span>Category:</span>
+                                            <span>{occ.category}</span>
+                                        </div>
+                                    )}
+                                    {occ.description && (
+                                        <div className="day-block__occurrence-description">
+                                            <span>
+                                                <span>Note:</span>
+                                                <span>{occ.description}</span>
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                    </div>
                 </div>
             </div>
         </>

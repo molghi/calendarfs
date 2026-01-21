@@ -29,6 +29,7 @@ const Routine = ({ routineArr, currentMonthNumber, currentYear, setRoutinesHighl
     return (
         <StyledRoutineListItem>
             <span
+                style={{ fontWeight: 900 }}
                 onMouseEnter={() => setRoutinesHighlighted(routineArr.map((x) => x.date))}
                 onMouseLeave={() => setRoutinesHighlighted([])}
             >
@@ -36,9 +37,11 @@ const Routine = ({ routineArr, currentMonthNumber, currentYear, setRoutinesHighl
             </span>{" "}
             —{" "}
             <span>
-                {`${routineArr.length} out of ${daysInCurrentMonth} days`} (
-                {((routineArr.length / daysInCurrentMonth) * 100).toFixed()}
-                %)
+                <i>{`${routineArr.length} out of ${daysInCurrentMonth} days`}</i>
+                <i>
+                    ({((routineArr.length / daysInCurrentMonth) * 100).toFixed()}
+                    %)
+                </i>
             </span>
         </StyledRoutineListItem>
     );
